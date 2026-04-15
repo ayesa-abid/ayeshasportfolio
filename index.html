@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AYESHA — Builder. Marketer. Creator.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #080808;
+  --white: #f2f0eb;
+  --g1: #141414;
+  --g2: #282828;
+  --g3: #777;
+  --g4: #aaa;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --mono: 'Space Mono', monospace;
+  --sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--sans);
+  overflow: hidden;
+  cursor: none;
+  height: 100vh;
+}
+
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9000; opacity: 0.4;
+}
+
+/* CURSOR — arrow */
+#cur {
+  position: fixed; pointer-events: none; z-index: 9999;
+  transform: translate(-2px, -2px);
+  width: 24px; height: 24px;
+  transition: transform .15s ease;
+}
+#cur svg { width: 24px; height: 24px; filter: drop-shadow(0 1px 3px rgba(0,0,0,.5)); transition: width .25s, height .25s; }
+#cur-ring { display: none; }
+body.cbig #cur svg { width: 32px; height: 32px; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 26px 52px;
+  mix-blend-mode: difference;
+  pointer-events: all;
+}
+.nav-logo { font-family: var(--mono); font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--white); cursor: pointer; opacity: 0; animation: fadeUp 1s ease 3.0s forwards; }
+.nav-links { display: flex; gap: 32px; list-style: none; opacity: 0; animation: fadeUp 1s ease 3.2s forwards; }
+.nav-links a { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--g3); text-decoration: none; transition: color .3s; cursor: pointer; }
+.nav-links a:hover, .nav-links a.act { color: var(--white); }
+
+/* VIEWS */
+.view {
+  position: fixed; inset: 0;
+  overflow-y: auto; overflow-x: hidden;
+  opacity: 0; pointer-events: none;
+  transition: opacity .6s var(--ease);
+}
+.view.on { opacity: 1; pointer-events: all; }
+
+/* ════ HOME ════ */
+#v-home {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  min-height: 100vh; position: relative; overflow: hidden;
+}
+
+
+
+/* AYESHA SVG stroke-fill animation */
+.hero-name-svg {
+  position: relative; z-index: 2;
+  width: min(92vw, 1100px);
+  opacity: 0; animation: svgFadeIn .1s ease .1s forwards;
+}
+@keyframes svgFadeIn { to { opacity:1; } }
+
+.hero-name-svg text {
+  font-family: var(--serif);
+  font-weight: 300;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  fill: transparent;
+  stroke: var(--white);
+  stroke-width: 0.8;
+  paint-order: stroke fill;
+  /* Phase 1: draw stroke (0 → 0.6s) */
+  stroke-dasharray: 3000;
+  stroke-dashoffset: 3000;
+  animation: drawStroke 1.2s var(--ease) .2s forwards,
+             fillIn .8s ease 1.3s forwards;
+}
+@keyframes drawStroke {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes fillIn {
+  to { fill: var(--white); stroke-width: 0; }
+}
+
+.hero-tagline {
+  font-family: var(--mono); font-size: clamp(8px,1vw,11px);
+  letter-spacing: .38em; text-transform: uppercase; color: var(--g3);
+  margin-top: 24px; position: relative; z-index: 2;
+  opacity: 0; animation: fadeUp 1s ease 2.3s forwards;
+}
+.hero-tagline b { color: var(--g4); font-weight: 400; }
+
+/* CARDS */
+.cards-grid {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  width: 100%; max-width: 1400px; margin: 0 52px;
+  border-top: 1px solid var(--g2);
+  position: relative; z-index: 2;
+  margin-top: 64px;
+  opacity: 0; animation: fadeUp 1.2s ease 2.6s forwards;
+}
+
+.card {
+  border-right: 1px solid var(--g2);
+  padding: 32px 28px 36px;
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: background .4s;
+  display: flex; flex-direction: column; gap: 18px;
+}
+.card:last-child { border-right: none; }
+.card::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: var(--white); transform: scaleX(0); transform-origin: left;
+  transition: transform .55s var(--ease);
+}
+.card:hover::after { transform: scaleX(1); }
+.card:hover { background: rgba(255,255,255,.025); }
+.card-num { font-family: var(--mono); font-size: 9px; color: var(--g3); letter-spacing: .2em; }
+.card-title { font-family: var(--serif); font-size: clamp(20px,2.2vw,30px); font-weight: 700; line-height: 1.15; }
+.card-sub { font-family: var(--mono); font-size: 8px; letter-spacing: .18em; text-transform: uppercase; color: var(--g3); line-height: 1.9; }
+.card-arrow { margin-top: auto; font-size: 18px; color: var(--g3); transition: transform .35s var(--ease), color .3s; font-family: var(--mono); }
+.card:hover .card-arrow { transform: translate(5px,-4px); color: var(--white); }
+
+/* ════ DETAIL VIEWS ════ */
+.dv { background: var(--black); }
+.dv-inner { max-width: 1380px; margin: 0 auto; padding: 110px 52px 100px; }
+
+.back-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--g3); background: none; border: none; cursor: pointer;
+  margin-bottom: 72px; transition: color .3s, gap .3s;
+}
+.back-btn:hover { color: var(--white); gap: 18px; }
+
+.v-label {
+  font-family: var(--mono); font-size: 9px; letter-spacing: .3em;
+  text-transform: uppercase; color: var(--g3);
+  display: flex; align-items: center; gap: 14px; margin-bottom: 28px;
+}
+.v-label::after { content:''; flex:1; height:1px; background: var(--g2); }
+
+.v-hed {
+  font-family: var(--serif); font-size: clamp(44px,6.5vw,94px);
+  font-weight: 700; line-height: 1.07; margin-bottom: 88px;
+}
+.v-hed em { font-style: italic; color: var(--g4); }
+
+/* PROJECT ROWS */
+.proj {
+  display: grid; grid-template-columns: 64px 280px 1fr;
+  gap: 44px; padding: 60px 0;
+  border-top: 1px solid var(--g2);
+  opacity: 0; transform: translateY(32px);
+  transition: opacity .9s var(--ease), transform .9s var(--ease);
+}
+.proj.vis { opacity:1; transform:translateY(0); }
+.proj:last-of-type { border-bottom: 1px solid var(--g2); }
+
+.pnum { font-family: var(--mono); font-size: 10px; color: var(--g2); padding-top: 4px; }
+.pname { font-family: var(--serif); font-size: clamp(26px,2.8vw,44px); font-weight: 700; line-height: 1.1; margin-bottom: 14px; }
+.ptags { display: flex; flex-wrap: wrap; gap: 6px; }
+.ptag { font-family: var(--mono); font-size: 8px; letter-spacing: .14em; border: 1px solid var(--g2); padding: 4px 10px; color: var(--g4); text-transform: uppercase; }
+
+.story { display: flex; flex-direction: column; gap: 22px; }
+.beat { display: grid; grid-template-columns: 84px 1fr; gap: 14px; }
+.blbl { font-family: var(--mono); font-size: 8px; letter-spacing: .22em; text-transform: uppercase; color: var(--g3); padding-top: 3px; }
+.btxt { font-size: 13px; line-height: 1.78; color: var(--g4); }
+.btxt strong { color: var(--white); font-weight: 500; }
+
+/* SKILLS */
+.skills-wrap { margin-top: 80px; border-top: 1px solid var(--g2); padding-top: 56px; }
+.sk-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--g2); }
+.sk-col { background: var(--black); padding: 28px; }
+.sk-name { font-family: var(--mono); font-size: 8px; letter-spacing: .25em; text-transform: uppercase; color: var(--g3); margin-bottom: 18px; }
+.sk-tags { display: flex; flex-direction: column; gap: 7px; }
+.sk-tag { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; color: var(--g4); border: 1px solid var(--g2); padding: 6px 12px; transition: border-color .3s, color .3s; }
+.sk-tag:hover { border-color: var(--g4); color: var(--white); }
+
+/* MARKETING */
+.mkt-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--g2); margin-bottom: 76px; }
+.mkt-stat { background: var(--black); padding: 48px 36px; opacity:0; transform:translateY(20px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.mkt-stat.vis { opacity:1; transform:translateY(0); }
+.mkt-stat:nth-child(2).vis{transition-delay:.12s} .mkt-stat:nth-child(3).vis{transition-delay:.24s}
+.mkt-big { font-family: var(--serif); font-size: clamp(52px,8vw,92px); font-weight: 700; line-height: 1; }
+.mkt-lbl { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--g3); margin-top: 10px; line-height: 1.7; }
+
+.mkt-body { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; opacity:0; transform:translateY(28px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+.mkt-body.vis { opacity:1; transform:translateY(0); }
+.mkt-prose { font-family: var(--serif); font-size: clamp(17px,1.9vw,23px); font-weight: 300; line-height: 1.78; color: var(--g4); }
+.mkt-prose em { font-style: italic; color: var(--white); }
+.mkt-list { list-style: none; display: flex; flex-direction: column; }
+.mkt-list li { font-family: var(--mono); font-size: 10px; letter-spacing: .15em; color: var(--g3); padding: 16px 0; border-bottom: 1px solid var(--g2); display: flex; align-items: center; gap: 14px; }
+.mkt-list li::before { content:'→'; color: var(--g2); }
+
+/* MEDIA */
+.mq-wrap { overflow: hidden; border-top: 1px solid var(--g2); border-bottom: 1px solid var(--g2); padding: 16px 0; margin: 52px 0; }
+.mq-track { display: flex; gap: 44px; white-space: nowrap; animation: mq 22s linear infinite; }
+.mq-track span { font-family: var(--serif); font-size: clamp(26px,3.5vw,46px); font-weight: 300; color: var(--g2); font-style: italic; flex-shrink: 0; }
+.mq-track span.br { color: var(--white); font-style: normal; }
+@keyframes mq { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+.media-txt { max-width: 740px; opacity:0; transform:translateY(28px); transition: opacity .9s var(--ease), transform .9s var(--ease); margin-bottom: 76px; }
+.media-txt.vis { opacity:1; transform:translateY(0); }
+.media-txt p { font-family: var(--serif); font-size: clamp(18px,2.1vw,25px); font-weight: 300; line-height: 1.78; color: var(--g4); margin-bottom: 24px; }
+.media-txt p strong { color: var(--white); font-weight: 600; }
+
+/* LEADERSHIP */
+.lead-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--g2); margin-bottom: 76px; }
+.lead-card { background: var(--black); padding: 44px 36px; opacity:0; transform:translateY(26px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+.lead-card.vis { opacity:1; transform:translateY(0); }
+.lead-card:nth-child(2).vis{transition-delay:.14s} .lead-card:nth-child(3).vis{transition-delay:.28s}
+.lc-tag { font-family: var(--mono); font-size: 8px; letter-spacing: .22em; text-transform: uppercase; color: var(--g3); margin-bottom: 26px; }
+.lc-name { font-family: var(--serif); font-size: clamp(19px,2vw,27px); font-weight: 700; line-height: 1.2; margin-bottom: 14px; }
+.lc-body { font-size: 13px; line-height: 1.75; color: var(--g3); }
+
+/* FOOTER */
+.vfoot { margin-top: 100px; border-top: 1px solid var(--g2); padding: 36px 0; display: flex; justify-content: space-between; align-items: center; }
+.vfoot-name { font-family: var(--serif); font-size: 13px; color: var(--g3); }
+.vfoot-links { display: flex; gap: 28px; }
+.vfoot-links a { font-family: var(--mono); font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: var(--g3); text-decoration: none; transition: color .3s; }
+.vfoot-links a:hover { color: var(--white); }
+
+/* UTILS */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* RESPONSIVE */
+@media(max-width:1000px) {
+  .cards-grid { grid-template-columns: 1fr 1fr; margin: 64px 24px 0; }
+  .card:nth-child(2){border-right:none}
+  .card:nth-child(1),.card:nth-child(2){border-bottom:1px solid var(--g2)}
+  .proj { grid-template-columns: 1fr; gap: 24px; }
+  .pnum { display: none; }
+  .mkt-stats { grid-template-columns: 1fr; }
+  .mkt-body { grid-template-columns: 1fr; gap: 40px; }
+  .lead-grid { grid-template-columns: 1fr; }
+  .sk-grid { grid-template-columns: 1fr 1fr; }
+  nav { padding: 20px 24px; }
+  .dv-inner { padding: 90px 24px 80px; }
+}
+@media(max-width:600px) {
+  .cards-grid { grid-template-columns: 1fr; }
+  .card { border-right:none !important; border-bottom: 1px solid var(--g2) !important; }
+  .sk-grid { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+  .beat { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div id="cur">
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M4 2L20 12L13 13.5L10 21L4 2Z" fill="#f2f0eb" stroke="#080808" stroke-width="1" stroke-linejoin="round"/>
+  </svg>
+</div>
+<div id="cur-ring"></div>
+
+<nav>
+  <div class="nav-logo" onclick="goHome()">Ayesha</div>
+  <ul class="nav-links">
+    <li><a onclick="show('work')" data-v="work">Work</a></li>
+    <li><a onclick="show('marketing')" data-v="marketing">Marketing</a></li>
+    <li><a onclick="show('media')" data-v="media">Media &amp; Societies</a></li>
+    <li><a href="https://www.linkedin.com/in/ayesha-abid-9725b037a?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ════════ HOME ════════ -->
+<div class="view on" id="v-home">
+  <svg class="hero-name-svg" viewBox="0 0 1100 160" xmlns="http://www.w3.org/2000/svg" aria-label="AYESHA">
+    <text x="50%" y="140" text-anchor="middle" font-size="155" font-family="'Cormorant Garamond',Georgia,serif" font-weight="300" letter-spacing="20">AYESHA</text>
+  </svg>
+
+  <p class="hero-tagline">
+    <b>Design</b>&nbsp;·&nbsp;<b>Marketing</b>&nbsp;·&nbsp;<b>Systems</b>&nbsp;·&nbsp;<b>Storytelling</b>
+  </p>
+
+  <div class="cards-grid">
+    <div class="card" onclick="show('work')">
+      <div class="card-num">01</div>
+      <div class="card-title">Technical<br>Work</div>
+      <div class="card-sub">LawyerConnect<br>Uni Marketplace<br>NetGraph Optimizer</div>
+      <div class="card-arrow">↗</div>
+    </div>
+    <div class="card" onclick="show('marketing')">
+      <div class="card-num">02</div>
+      <div class="card-title">Marketing<br>— Atomcamp</div>
+      <div class="card-sub">30+ video pieces<br>Event campaigns<br>Product storytelling</div>
+      <div class="card-arrow">↗</div>
+    </div>
+    <div class="card" onclick="show('media')">
+      <div class="card-num">03</div>
+      <div class="card-title">Media &amp;<br>Societies</div>
+      <div class="card-sub">Dumb CS Dishwashers<br>ACM · Women in Tech<br>GIKI Communities</div>
+      <div class="card-arrow">↗</div>
+    </div>
+    <div class="card" onclick="window.open('https://www.linkedin.com/in/ayesha-abid-9725b037a?utm_source=share_via&utm_content=profile&utm_medium=member_ios','_blank')">
+      <div class="card-num">04</div>
+      <div class="card-title">Get in<br>Touch</div>
+      <div class="card-sub">LinkedIn Profile<br>Open to work<br>Let's build together</div>
+      <div class="card-arrow">↗</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ WORK VIEW ════════ -->
+<div class="view dv" id="v-work">
+  <div class="dv-inner">
+    <button class="back-btn" onclick="goHome()">← Back</button>
+
+    <div class="v-label"><span>01</span> Technical Builder</div>
+    <h2 class="v-hed">Systems that <em>think</em>,<br>not just software<br>that runs.</h2>
+
+    <div class="proj">
+      <div class="pnum">001</div>
+      <div>
+        <div class="pname">Lawyer<br>Connect</div>
+        <div class="ptags">
+          <span class="ptag">Flask</span><span class="ptag">Python</span>
+          <span class="ptag">Real-Time</span><span class="ptag">Auth</span>
+        </div>
+      </div>
+      <div class="story">
+        <div class="beat"><span class="blbl">Problem</span><p class="btxt">Legal help is inaccessible. <strong>Finding the right lawyer is a broken process</strong> — slow, opaque, and untrustworthy for people who need it most.</p></div>
+        <div class="beat"><span class="blbl">Thinking</span><p class="btxt">A matching system lives or dies by trust infrastructure. Designed around <strong>secure auth, structured profiles, and low-latency communications</strong> as core pillars.</p></div>
+        <div class="beat"><span class="blbl">System</span><p class="btxt">Legal matching platform with <strong>real-time messaging, role-based access control, and end-to-end secure authentication</strong> built in Flask.</p></div>
+        <div class="beat"><span class="blbl">Impact</span><p class="btxt">A product that <strong>removes friction from access to justice</strong>. The architecture scales to any professional matching domain — legal, medical, financial.</p></div>
+      </div>
+    </div>
+
+    <div class="proj">
+      <div class="pnum">002</div>
+      <div>
+        <div class="pname">University<br>Marketplace</div>
+        <div class="ptags">
+          <span class="ptag">Node.js</span><span class="ptag">PostgreSQL</span>
+          <span class="ptag">P2P</span><span class="ptag">Messaging</span>
+        </div>
+      </div>
+      <div class="story">
+        <div class="beat"><span class="blbl">Problem</span><p class="btxt">University economies are informal and inefficient. <strong>Students buy and sell with no system to support trust, discovery, or accountability.</strong></p></div>
+        <div class="beat"><span class="blbl">Thinking</span><p class="btxt">Peer-to-peer platforms live or die by trust signals. <strong>Designed around reputation, real-time messaging, and frictionless listing flows</strong> from the ground up.</p></div>
+        <div class="beat"><span class="blbl">System</span><p class="btxt"><strong>Scalable backend with user profiles, in-app messaging, and product listings</strong> built for concurrency — handles high request volume without degradation.</p></div>
+        <div class="beat"><span class="blbl">Impact</span><p class="btxt">A community economy platform that <strong>made campus commerce legible and trustworthy</strong>. A replicable model for any closed-network marketplace.</p></div>
+      </div>
+    </div>
+
+    <div class="proj">
+      <div class="pnum">003</div>
+      <div>
+        <div class="pname">NetGraph<br>Optimizer</div>
+        <div class="ptags">
+          <span class="ptag">C++</span><span class="ptag">BFS/DFS</span>
+          <span class="ptag">AVL Tree</span><span class="ptag">Routing</span>
+        </div>
+      </div>
+      <div class="story">
+        <div class="beat"><span class="blbl">Problem</span><p class="btxt">Network routing is computationally expensive. <strong>Most solutions don't balance speed and path quality simultaneously</strong> under real-world constraints.</p></div>
+        <div class="beat"><span class="blbl">Thinking</span><p class="btxt">Graph traversal at the core — <strong>BFS for breadth, DFS for depth, AVL trees for self-balancing search</strong> at every decision node.</p></div>
+        <div class="beat"><span class="blbl">System</span><p class="btxt">A <strong>graph-based routing engine</strong> combining classical algorithms with balanced tree structures for high-speed, high-accuracy path decisions in C++.</p></div>
+        <div class="beat"><span class="blbl">Impact</span><p class="btxt">Proved that <strong>classical CS theory translates directly into real-world optimization</strong>. Algorithmic thinking isn't academic — it's engineering with taste.</p></div>
+      </div>
+    </div>
+
+    <div class="skills-wrap">
+      <div class="v-label" style="margin-bottom:28px;"><span>Stack</span></div>
+      <div class="sk-grid">
+        <div class="sk-col"><div class="sk-name">Engineering</div><div class="sk-tags"><span class="sk-tag">Python</span><span class="sk-tag">C++</span><span class="sk-tag">Flask</span><span class="sk-tag">FastAPI</span><span class="sk-tag">Node.js</span></div></div>
+        <div class="sk-col"><div class="sk-name">Data / ML</div><div class="sk-tags"><span class="sk-tag">SQL</span><span class="sk-tag">PostgreSQL</span><span class="sk-tag">Scikit-learn</span><span class="sk-tag">NLP</span><span class="sk-tag">OpenCV</span></div></div>
+        <div class="sk-col"><div class="sk-name">Systems</div><div class="sk-tags"><span class="sk-tag">Docker</span><span class="sk-tag">Linux</span><span class="sk-tag">Git</span><span class="sk-tag">REST APIs</span></div></div>
+        <div class="sk-col"><div class="sk-name">Creative</div><div class="sk-tags"><span class="sk-tag">Figma</span><span class="sk-tag">Unity</span><span class="sk-tag">Content Tools</span><span class="sk-tag">Video</span></div></div>
+      </div>
+    </div>
+
+    <div class="vfoot">
+      <span class="vfoot-name">Ayesha — Technical Work</span>
+      <div class="vfoot-links">
+        <a href="https://www.linkedin.com/in/ayesha-abid-9725b037a?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank">LinkedIn</a>
+        <a onclick="goHome()" style="cursor:pointer;">Home</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ MARKETING VIEW ════════ -->
+<div class="view dv" id="v-marketing">
+  <div class="dv-inner">
+    <button class="back-btn" onclick="goHome()">← Back</button>
+
+    <div class="v-label"><span>02</span> Marketing — Atomcamp</div>
+    <h2 class="v-hed">Technical ideas<br>translated into<br><em>human attention.</em></h2>
+
+    <div class="mkt-stats">
+      <div class="mkt-stat"><div class="mkt-big">30+</div><div class="mkt-lbl">Video content<br>pieces produced</div></div>
+      <div class="mkt-stat"><div class="mkt-big">∞</div><div class="mkt-lbl">Stories that<br>made people stay</div></div>
+      <div class="mkt-stat"><div class="mkt-big">1</div><div class="mkt-lbl">Core skill:<br>translation</div></div>
+    </div>
+
+    <div class="mkt-body">
+      <p class="mkt-prose">
+        <strong><em>The hardest problem in tech marketing isn't the algorithm.</em></strong><br><br>
+        It's making someone who <em>doesn't care, care.</em>
+        That's what this work was — <strong>translation work.</strong>
+        From dense technical to felt human.
+        From product feature to lived story.
+      </p>
+      <ul class="mkt-list">
+        <li>Event storytelling campaigns</li>
+        <li>Product explainer content</li>
+        <li>Video production &amp; scripting</li>
+        <li>Audience engagement strategy</li>
+        <li>Technical concept simplification</li>
+        <li>Brand voice development</li>
+      </ul>
+    </div>
+
+    <div class="vfoot">
+      <span class="vfoot-name">Ayesha — Atomcamp</span>
+      <div class="vfoot-links">
+        <a href="https://www.linkedin.com/in/ayesha-abid-9725b037a?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank">LinkedIn</a>
+        <a onclick="goHome()" style="cursor:pointer;">Home</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ MEDIA & SOCIETIES VIEW ════════ -->
+<div class="view dv" id="v-media">
+  <div class="dv-inner">
+    <button class="back-btn" onclick="goHome()">← Back</button>
+
+    <div class="v-label"><span>03</span> Media Identity &amp; Societies — GIKI</div>
+    <h2 class="v-hed">Culture as<br><em>experiment.</em><br>Community<br>as <em>system.</em></h2>
+
+    <div class="mq-wrap">
+      <div class="mq-track">
+        <span class="br">Dumb CS Dishwashers</span>
+        <span>&nbsp;·&nbsp; cultural experiment &nbsp;·&nbsp;</span>
+        <span class="br">Gen-Z attention</span>
+        <span>&nbsp;·&nbsp; meme mechanics &nbsp;·&nbsp;</span>
+        <span class="br">viral architecture</span>
+        <span>&nbsp;·&nbsp; ACM · GIKI &nbsp;·&nbsp;</span>
+        <span class="br">Women in Tech</span>
+        <span>&nbsp;·&nbsp; community systems &nbsp;·&nbsp;</span>
+        <span class="br">Dumb CS Dishwashers</span>
+        <span>&nbsp;·&nbsp; cultural experiment &nbsp;·&nbsp;</span>
+        <span class="br">Gen-Z attention</span>
+        <span>&nbsp;·&nbsp; meme mechanics &nbsp;·&nbsp;</span>
+        <span class="br">viral architecture</span>
+        <span>&nbsp;·&nbsp; ACM · GIKI &nbsp;·&nbsp;</span>
+        <span class="br">Women in Tech</span>
+        <span>&nbsp;·&nbsp; community systems &nbsp;·&nbsp;</span>
+      </div>
+    </div>
+
+    <div class="media-txt">
+      <p><strong><em>"Dumb CS Dishwashers" isn't a joke project.</em></strong><br><br>It's a live experiment in attention mechanics — studying how <strong>Gen-Z consumes, remixes, and amplifies ideas</strong> through cultural shorthand.</p>
+      <p>Memes as <strong>communication theory.</strong> Virality as a <strong>design problem.</strong> Every post is a hypothesis about what makes a concept stick. The goal isn't to be funny — it's to understand <strong>how ideas travel.</strong></p>
+    </div>
+
+    <div class="v-label" style="margin-bottom:36px;"><span>GIKI Societies &amp; Leadership</span></div>
+
+    <div class="lead-grid">
+      <div class="lead-card">
+        <div class="lc-tag">01 / Developer Community</div>
+        <div class="lc-name">Hackathons &amp; Speaker Series</div>
+        <p class="lc-body">Built and sustained developer communities through events, hackathons, and speaker programming. Created recurring rituals that made people show up — and come back again.</p>
+      </div>
+      <div class="lead-card">
+        <div class="lc-tag">02 / ACM Ecosystem</div>
+        <div class="lc-name">Brand Promotion &amp; Identity</div>
+        <p class="lc-body">Ran promotion and branding for the ACM chapter. Treated the student org like a product launch — consistent voice, designed presence, measurable engagement at every event.</p>
+      </div>
+      <div class="lead-card">
+        <div class="lc-tag">03 / Women in Tech</div>
+        <div class="lc-name">Awareness &amp; Engagement</div>
+        <p class="lc-body">Led initiatives to grow awareness and participation for women in tech. Shifted the conversation from representation as optics to representation as infrastructure.</p>
+      </div>
+    </div>
+
+    <div class="vfoot">
+      <span class="vfoot-name">Ayesha — Media &amp; Societies</span>
+      <div class="vfoot-links">
+        <a href="https://www.linkedin.com/in/ayesha-abid-9725b037a?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank">LinkedIn</a>
+        <a onclick="goHome()" style="cursor:pointer;">Home</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Cursor — arrow
+const cur = document.getElementById('cur');
+let mx=0,my=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX; my=e.clientY;
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
+});
+document.addEventListener('mouseover',e=>{
+  document.body.classList.toggle('cbig',!!e.target.closest('a,button,.card,.sk-tag,.back-btn'));
+});
+
+// View switching
+function show(name) {
+  document.querySelectorAll('.view').forEach(v=>{v.classList.remove('on');v.scrollTop=0;});
+  const el = document.getElementById('v-'+name);
+  el.classList.add('on');
+  document.querySelectorAll('.nav-links a[data-v]').forEach(a=>a.classList.toggle('act',a.dataset.v===name));
+  setTimeout(()=>revealIn(el), 80);
+}
+
+function goHome(){
+  document.querySelectorAll('.view').forEach(v=>{v.classList.remove('on');});
+  document.getElementById('v-home').classList.add('on');
+  document.querySelectorAll('.nav-links a[data-v]').forEach(a=>a.classList.remove('act'));
+}
+
+function revealIn(container) {
+  const els = container.querySelectorAll('.proj,.mkt-stat,.mkt-body,.media-txt,.lead-card');
+  els.forEach((el,i)=>{
+    el.classList.remove('vis');
+    setTimeout(()=>el.classList.add('vis'), 60+i*90);
+  });
+}
+
+// Scroll-based reveal inside detail views
+document.querySelectorAll('.dv').forEach(view=>{
+  view.addEventListener('scroll',()=>{
+    view.querySelectorAll('.proj:not(.vis),.lead-card:not(.vis)').forEach(el=>{
+      if(el.getBoundingClientRect().top < window.innerHeight*.88) el.classList.add('vis');
+    });
+  });
+});
+</script>
+</body>
+</html>
